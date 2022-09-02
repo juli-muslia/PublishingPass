@@ -118,6 +118,7 @@ class Publishing_Pass_Admin
 			wp_enqueue_script('Bootstrap js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
 			wp_enqueue_script('Datatables js', 'https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js');
 			wp_enqueue_script('Datatables bootstrap js', 'https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js');
+			wp_enqueue_script('Js Export', 'https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js');
 		}
 	}
 
