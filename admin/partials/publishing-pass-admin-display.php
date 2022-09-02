@@ -308,8 +308,10 @@ function html_table_to_excel(type)
         var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
 
         XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+        
+        let filename = `PG_Export_${(new Date().toJSON().slice(0,10))}.`;
 
-        XLSX.writeFile(file, 'file.' + type);
+        XLSX.writeFile(file, filename + type);
     }
 
     const export_button = document.getElementById('export-button');
