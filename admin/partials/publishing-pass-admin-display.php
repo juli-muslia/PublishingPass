@@ -252,77 +252,81 @@ function crudPublishingPass()
 
       });
   </script>
-
-  <script>
-      $(document).ready(function () {
-
-          $('.deletebtn').on('click', function () {
-
-              $('#deletemodal').modal('show');
-
-              $tr = $(this).closest('tr');
-
-              var data = $tr.children("td").map(function () {
-                  return $(this).text();
-              }).get();
-
-              console.log(data);
-
-              $('#delete_id').val(data[0]);
-
-          });
-      });
-  </script>
-
-
-
-        <script>
-    
-    $(document).ready(function () {
-
-        $('#datatableid tbody').on('click', '.editbtn', function () {
-
-            $('#editmodal').modal('show');
-
-            $tr = $(this).closest('tr');
-
-            var data = $tr.children("td").map(function () {
-                return $(this).text();
-            }).get();
-
-            console.log(data);
-
-            $('#update_id').val(data[0]);
-            $('#website').val(data[1]);
-            $('#email').val(data[2]);
-            $('#password').val(data[3]);
-            $('#notes').val(data[4]);
-        });
-    });
-</script>
+    <!--  Script for the DELETE button -->
 <script>
-function html_table_to_excel(type)
-    {
-        var data = document.getElementById('datatableid');
-
-        var file = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
-
-        XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
-        
-        let filename = `PG_Export_${(new Date().toJSON().slice(0,10))}.`;
-
-        XLSX.writeFile(file, filename + type);
-    }
-
-    const export_button = document.getElementById('export-button');
-
-    export_button.addEventListener('click', () =>  {
-        html_table_to_excel('xlsx');
+    $('#datatableid').on('click', '.deletebtn', function () {
+        $('#deletemodal').modal('show');
+        $tr = $(this).closest('tr');
+        var data = $tr.children("td").map(function () {
+            return $(this).text();
+        }).get();
+        console.log(data);
+        $('#delete_id').val(data[0]);
     });
+</script>
+
+<!--  Script for the EDIT button -->
+<script>
+    
+    $('#datatableid').on('click', '.editbtn', function () {
+        $('#editmodal').modal('show');
+        $tr = $(this).closest('tr');
+        var data = $tr.children("td").map(function () {
+            return $(this).text();
+        }).get();
+        console.log(data);
+        $('#update_id').val(data[0]);
+        $('#website').val(data[1]);
+        $('#email').val(data[2]);
+        $('#password').val(data[3]);
+        $('#notes').val(data[4]);
+    });
+</script>
+
+<!--  Script to export data into excel -->
+<script>
+
+function html_table_to_excel(type) {
+    // Get the DataTable instance
+    var dataTable = $('#datatableid').DataTable();
+
+    // Get the data for the specified columns from all rows
+    var selectedData = [];
+    
+    dataTable.rows().every(function () {
+        var rowData = this.data();
+        selectedData.push([
+            rowData[0], // ID
+            rowData[1], // Website
+            rowData[2], // Username / Email
+            rowData[3], // Password
+            rowData[4]  // Notes
+        ]);
+    });
+
+    // Create the worksheet and workbook
+    var worksheet = XLSX.utils.aoa_to_sheet([['ID', 'Website', 'Username / Email', 'Password', 'Notes'], ...selectedData]);
+    var workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+
+    // Write and download the Excel file
+    XLSX.write(workbook, { bookType: type, bookSST: true, type: 'base64' });
+
+    let filename = `PG_Export_${(new Date().toJSON().slice(0, 10))}.`;
+
+    XLSX.writeFile(workbook, filename + type);
+}
+
+const export_button = document.getElementById('export-button');
+
+export_button.addEventListener('click', () => {
+    html_table_to_excel('xlsx');
+});
+
+
 
 
 </script>
-
 
 </body>
 </html>
